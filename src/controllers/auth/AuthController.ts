@@ -5,7 +5,7 @@ import { IAuthService } from "../../service/auth/IAuthService.js";
 import { signupDto } from "../../dto/request/auth/regsiter.dto.js";
 import { loginDto } from "../../dto/request/auth/login.dto.js";
 import { sendResponse } from "../../utils/responseHelper.js";
-import { clearAuthCookies, setAuthCookies } from "../../utils/cookieHelper.js";
+import { clearAuthCookies, setAuthCookies, setAccessTokenCookie } from "../../utils/cookieHelper.js";
 import { HTTP_STATUS } from "../../constants/http-status.constants.js";
 import { COMMON_MESSAGES } from "../../constants/common.messages.js";
 
@@ -46,6 +46,24 @@ export class AuthController {
             return sendResponse(res, HTTP_STATUS.OK, COMMON_MESSAGES.LOGOUT_SUCCESSFUL)
         } catch (error) {
             next(error)
+        }
+    }
+
+    refresh = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const refreshToken = req.cookies?.refreshToken;
+            if (!refreshToken) {
+                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, "No refresh token provided");
+            }
+
+            const result = await this._authService.refreshToken(refreshToken);
+            setAccessTokenCookie(res, result.accessToken);
+
+            return sendResponse(res, HTTP_STATUS.OK, "Token refreshed successfully", {
+                user: result.user
+            });
+        } catch (error) {
+            next(error);
         }
     }
 }

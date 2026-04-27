@@ -8,5 +8,7 @@ export interface IAuthService {
     signup(data : signupDto) : Promise<void>
 
     login(data: loginDto) : Promise<LoginResponseDto>
+
+    refreshToken(token: string): Promise<LoginResponseDto>
 }
 

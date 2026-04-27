@@ -7,7 +7,7 @@ import { signupDto } from "../../dto/request/auth/regsiter.dto.js";
 import { loginDto } from "../../dto/request/auth/login.dto.js";
 import { LoginResponseDto } from "../../dto/response/auth/login-response.dto.js";
 import { AppError } from "../../utils/AppError.js";
-import { generateAccessToken, generateRefreshToken } from "../../utils/jwtHelper.js";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../../utils/jwtHelper.js";
 import { AuthMapper } from "../../mapper/auth/auth.mapper.js";
 import { UserResponseDto } from "../../dto/response/auth/userResponseDto.dto.js";
 
@@ -48,5 +48,23 @@ export class AuthService implements IAuthService {
         const refreshToken = generateRefreshToken(String(user._id));
 
         return AuthMapper.toLoginResponseDto(user, accessToken, refreshToken);
+    }
+
+    async refreshToken(token: string): Promise<LoginResponseDto> {
+        try {
+
+            const decoded = verifyRefreshToken(token) as { userId: string };
+            
+            const user = await this._userRepo.findById(decoded.userId);
+            if (!user) {
+                throw new AppError("User not found", 401);
+            }
+
+            const accessToken = generateAccessToken(String(user._id));
+
+            return AuthMapper.toLoginResponseDto(user, accessToken, token);
+        } catch (error) {
+            throw new AppError("Invalid or expired refresh token", 401);
+        }
     }
 }
