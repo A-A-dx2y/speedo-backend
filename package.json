@@ -1,0 +1,59 @@
+{
+  "name": "speedo-backend",
+  "version": "1.0.0",
+  "description": "vehicle tracking",
+  "homepage": "https://github.com/A-A-dx2y/speedo-backend#readme",
+  "bugs": {
+    "url": "https://github.com/A-A-dx2y/speedo-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-A-dx2y/speedo-backend.git"
+  },
+  "license": "ISC",
+  "author": "achu",
+  "type": "module",
+  "main": "src/server.ts",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "axios": "^1.15.2",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "geolib": "^3.3.14",
+    "inversify": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.12.1",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "reflect-metadata": "^0.2.2",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/inversify": "^2.0.32",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.1",
+    "tsx": "^4.19.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.0"
+  }
+}
