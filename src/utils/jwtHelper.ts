@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const ACCESS_TOKEN_SECRET = process.env.JWT_ACCESS_SECRET || "default_access_secret";
 const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET || "default_refresh_secret";
@@ -12,7 +12,7 @@ export const generateRefreshToken = (userId: string): string => {
 };
 
 export const verifyAccessToken = (token: string) => {
-    return jwt.verify(token, ACCESS_TOKEN_SECRET);
+    return jwt.verify(token, ACCESS_TOKEN_SECRET) as JwtPayload;
 };
 
 export const verifyRefreshToken = (token: string) => {

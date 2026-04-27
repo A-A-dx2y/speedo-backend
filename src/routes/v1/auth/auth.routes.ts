@@ -8,6 +8,6 @@ const authController = container.get<AuthController>(DI_TYPES.CONTROLLERS.AUTH_C
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
-router.post('/logout', authController.logout)
+router.post('/logout', authController.logout);
 
 export default router;
