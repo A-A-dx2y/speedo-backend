@@ -20,6 +20,11 @@ app.use(cors({
     credentials: true
 }))
 
+//? health check Route
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 app.use('/api', routes)
 
 app.use(errorHandler)
