@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
     try {
-        console.log("MONGO_URI:", process.env.MONGO_URI);
         await connectDB();
 
         const httpServer = http.createServer(app)
