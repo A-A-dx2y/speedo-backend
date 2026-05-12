@@ -1,35 +1,6 @@
 import * as geolib from 'geolib';
+import { RawGPSRow, ProcessedGPSPoint, TripSummary } from '../types/trip.types.js';
 
-export interface RawGPSRow {
-  latitude: number;
-  longitude: number;
-  timestamp: Date;
-  ignition: 'on' | 'off';
-}
-
-export interface ProcessedGPSPoint {
-  latitude: number;
-  longitude: number;
-  timestamp: Date;
-  ignition: 'on' | 'off';
-  speed: number; 
-  distanceFromPrevious: number; 
-  isOverspeeding: boolean;
-  status: 'moving' | 'idling' | 'stopped';
-}
-
-export interface TripSummary {
-  totalDistance: number; 
-  totalDuration: number; 
-  idlingDuration: number; 
-  stoppageDuration: number; 
-  overSpeedTime: number; 
-  overSpeedDistance: number; 
-  avgSpeed: number; 
-  maxSpeed: number; 
-  startTime: Date;
-  endTime: Date;
-}
 
 const IDLE_SPEED_THRESHOLD = 1;
 const OVER_SPEED_LIMIT = 60;  

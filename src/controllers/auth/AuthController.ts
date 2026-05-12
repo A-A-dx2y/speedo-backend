@@ -53,13 +53,13 @@ export class AuthController {
         try {
             const refreshToken = req.cookies?.refreshToken;
             if (!refreshToken) {
-                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, "No refresh token provided");
+                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, COMMON_MESSAGES.REFRESH_TOKEN_MISSING);
             }
 
             const result = await this._authService.refreshToken(refreshToken);
             setAccessTokenCookie(res, result.accessToken);
 
-            return sendResponse(res, HTTP_STATUS.OK, "Token refreshed successfully", {
+            return sendResponse(res, HTTP_STATUS.OK, COMMON_MESSAGES.TOKEN_REFRESHED, {
                 user: result.user
             });
         } catch (error) {

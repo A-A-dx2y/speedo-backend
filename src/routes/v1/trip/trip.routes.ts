@@ -12,7 +12,6 @@ const tripController = container.get<TripController>(DI_TYPES.CONTROLLERS.TRIP_C
 
 router.post("/upload", authMiddleware, upload.single('file'), tripController.uploadTrip);
 
-// Retrieval Routes
 router.get("/", authMiddleware, tripController.getAllTrips);
 router.get("/:id", authMiddleware, tripController.getTripById);
 router.delete("/:id", authMiddleware, tripController.deleteTrip);

@@ -15,7 +15,7 @@ export class TripRepository extends BaseRepository<ITrip> implements ITripReposi
     }
 
     async createTrip(data: ITripData): Promise<ITrip> {
-        // Handle the string to ObjectId conversion strictly at the repository boundary
+        
         const tripToSave = {
             ...data,
             userId: new Types.ObjectId(data.userId)

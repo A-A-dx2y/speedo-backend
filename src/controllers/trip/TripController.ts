@@ -5,6 +5,11 @@ import { Request, Response, NextFunction } from "express";
 import fs from "fs/promises";
 import { sendResponse } from "../../utils/responseHelper.js";
 import { HTTP_STATUS } from "../../constants/http-status.constants.js";
+import { TRIP_MESSAGES } from "../../constants/trip.messages.js";
+import { COMMON_MESSAGES } from "../../constants/common.messages.js";
+import logger from "../../config/logger.js";
+
+
 
 @injectable()
 export class TripController {
@@ -19,30 +24,28 @@ export class TripController {
 
             
             if (!req.file) {
-                return sendResponse(res,HTTP_STATUS.BAD_REQUEST, "No Csv file uploaded",null)
+                return sendResponse(res,HTTP_STATUS.BAD_REQUEST, TRIP_MESSAGES.NO_FILE_UPLOADED, null)
             }
 
             const userId = req.user?.id; 
 
             if (!userId) {
-                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, 'Unauthorized: User ID missing',null)
+                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, COMMON_MESSAGES.UNAUTHORIZED, null)
             }
 
-            // 3. Let the Service Layer handle the math and database logic
+            
             const tripDTO = await this.tripService.uploadTrip(userId, filePath!, req.file.originalname);
 
-            // 4. Return the clean DTO to the frontend
-            return sendResponse(res,HTTP_STATUS.OK,"Trip uploaded and processed successfully",tripDTO);
+            return sendResponse(res,HTTP_STATUS.OK, TRIP_MESSAGES.TRIP_UPLOADED, tripDTO);
 
         } catch (error) {
-            // If the CSV is bad or the DB fails, pass it to Express's global error handler
             next(error);
         } finally {
             if(filePath){
                 try {
                     await fs.unlink(filePath!);
-                } catch (error) {
-                    console.error("Failed to delete temp csv file:", error)
+                } catch (err) {
+                    logger.error("Failed to delete temp csv file:", err)
                 }
             }
         }
@@ -52,11 +55,11 @@ export class TripController {
         try {
             const userId = req.user?.id;
             if (!userId) {
-                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, "Unauthorized: User ID missing", null);
+                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, COMMON_MESSAGES.UNAUTHORIZED, null);
             }
 
             const trips = await this.tripService.getAllTrips(userId);
-            return sendResponse(res, HTTP_STATUS.OK, "Trips fetched successfully", trips);
+            return sendResponse(res, HTTP_STATUS.OK, TRIP_MESSAGES.TRIP_FETCHED, trips);
         } catch (error) {
             next(error);
         }
@@ -66,18 +69,18 @@ export class TripController {
         try {
             const userId = req.user?.id;
             if (!userId) {
-                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, "Unauthorized: User ID missing", null);
+                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, COMMON_MESSAGES.UNAUTHORIZED, null);
             }
 
             const tripId = req.params.id;
             
             if (!tripId || typeof tripId !== 'string') {
-                return sendResponse(res, HTTP_STATUS.BAD_REQUEST, "Invalid Trip ID", null);
+                return sendResponse(res, HTTP_STATUS.BAD_REQUEST, TRIP_MESSAGES.INVALID_TRIP_ID, null);
             }
 
             const tripDetail = await this.tripService.getTripById(userId, tripId);
             
-            return sendResponse(res, HTTP_STATUS.OK, "Trip details fetched successfully", tripDetail);
+            return sendResponse(res, HTTP_STATUS.OK, TRIP_MESSAGES.TRIP_DETAILS_FETCHED, tripDetail);
         } catch (error) {
             next(error);
         }
@@ -87,16 +90,16 @@ export class TripController {
         try {
             const userId = req.user?.id;
             if (!userId) {
-                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, "Unauthorized: User ID missing", null);
+                return sendResponse(res, HTTP_STATUS.UNAUTHORIZED, COMMON_MESSAGES.UNAUTHORIZED, null);
             }
 
             const tripId = req.params.id as string;
             if (!tripId) {
-                return sendResponse(res, HTTP_STATUS.BAD_REQUEST, "Trip ID missing", null);
+                return sendResponse(res, HTTP_STATUS.BAD_REQUEST, TRIP_MESSAGES.TRIP_ID_MISSING, null);
             }
 
             await this.tripService.deleteTrip(userId, tripId);
-            return sendResponse(res, HTTP_STATUS.OK, "Trip deleted successfully", null);
+            return sendResponse(res, HTTP_STATUS.OK, TRIP_MESSAGES.TRIP_DELETED, null);
         } catch (error) {
             next(error);
         }

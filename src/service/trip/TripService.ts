@@ -90,10 +90,8 @@ export class TripService implements ITripService {
             throw new Error("Trip not found");
         }
 
-        // Delete associated GPS data
         await this.gpsRepository.deleteByTripId(tripId);
 
-        // Delete the trip itself
         await this.tripRepository.deleteById(tripId);
     }
 }

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import csv from 'csv-parser';
-import { RawGPSRow } from './tripCalculator.js';
+import { RawGPSRow } from '../types/trip.types.js';
 import logger from '../config/logger.js';
 
 export class CSVParser {
